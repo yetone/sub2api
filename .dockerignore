@@ -11,6 +11,10 @@
 *.md
 !deploy/DOCKER.md
 docs/
+# …but the legal markdown is imported by the frontend build (?raw), so it must
+# stay in the build context (see the COPY docs/ in the Dockerfile frontend stage).
+!docs/legal/
+!docs/legal/*.md
 
 # IDE
 .idea/
