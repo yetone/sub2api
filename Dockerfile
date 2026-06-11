@@ -27,8 +27,13 @@ RUN corepack enable && corepack prepare pnpm@9 --activate
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# Copy frontend source and build
+# Copy frontend source and build. The legal-document views import markdown from
+# the repo-root docs/ via `?raw` (e.g. ../../../../docs/legal/admin-compliance.zh.md),
+# which resolves to /app/docs — so docs/ must be present in this stage or vite's
+# build fails to resolve it (upstream's Dockerfile omits this; their releases
+# build the frontend outside Docker).
 COPY frontend/ ./
+COPY docs/ /app/docs/
 RUN pnpm run build
 
 # -----------------------------------------------------------------------------
